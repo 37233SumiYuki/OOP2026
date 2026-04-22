@@ -6,23 +6,33 @@ namespace DistanceConverter
     {
         static void Main(string[] args)
         {
-          
-            if (args.Length >= 1 && args[0] == "-tom")
+           if (args.Length == 3
+                && int,TryParse(args[1], out var start) && int.TryParse(args[2], out var stop)){
+                if (args[0] == "-tom")
+                {   PrintMeterToFeetList(start, end);
+                    
+                }else if (args[0] == )
+                {
+                    
+                }
+                else if (args[0] == "-tof")
+                {
+                }
+            }
             {
-                PrintFeetToMeterList (int.Parse(args[1]), int.Parse(args[2]));
+
+                PrintFeetToMeterList(int.Parse(args[1]), int.Parse(args[2]));
+                Console.WriteLine(args + ":変換成功");
             }
             else if (args.Length >= 1 && args[0] == "-tof")
             {
                 PrintMeterToFeetList(int.Parse(args[1]), int.Parse(args[2]));
             }
-            else
-            {
-                Console.WriteLine("引数エラー");
-
-            }
+            Console.WriteLine("引数エラー");
         }
 
-        static void PrintMeterToFeetList(int start, int stop)　
+
+        static void PrintMeterToFeetList(int start, int stop)
         {
             for (int meters = start; meters <= stop; meters++)
             {
