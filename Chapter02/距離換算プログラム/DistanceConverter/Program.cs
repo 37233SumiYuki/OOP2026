@@ -9,21 +9,37 @@ namespace DistanceConverter
 
             if (args.Length >= 1 && args[0] == "-tom")
             {
-                for (int feet = 1; feet <= 10; feet++)
-                {
-                    double meters = FeetToMeter(feet);
-                    Console.WriteLine($"{feet}ft = {meters:0.0000} m");
-                }
+                PrintFeetToMeterList(1, 10);
+            }
+            else if (args.Length >= 1 && args[0] == "-tof") {
+                PrintMeterToFeetList(1, 10);
             }
             else
             {
-                for (int meters = 1; meters <= 10; meters++)
-                {
-                    double feet = MeterToFeet(meters);
-                    Console.WriteLine($"{meters}m = {feet:0.0000} ft");
-                }
+                Console.WriteLine("引数エラー");
+            
             }
         }
+
+        static void PrintMeterToFeetList(int start, int stop)
+        {
+            for (int meters = start; meters <= stop; meters++)
+            {
+                double feet = MeterToFeet(meters);
+                Console.WriteLine($"{meters}m = {feet:0.0000} ft");
+            }
+        }
+
+        static void PrintFeetToMeterList(int start, int stop)
+        {
+            for (int feet = start; feet <= stop; feet++)
+            {
+                double meters = FeetToMeter(feet);
+                Console.WriteLine($"{feet}ft = {meters:0.0000} m");
+            }
+
+        }
+
         static double FeetToMeter(int feet)
         {
             return feet * 0.3048;
