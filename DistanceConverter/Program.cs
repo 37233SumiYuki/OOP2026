@@ -13,7 +13,7 @@ namespace DistanceConveter
 
                 if (args[0] == "-tom")
                 {
-                    PrintFeettoMeterList(start, end);
+                    PrintFeetToMeterList(start, end);
                 }
                 else if (args[0] == "-tof")
                     PrintMeterToFeetList(start, end);
@@ -27,35 +27,30 @@ namespace DistanceConveter
                 Console.WriteLine("引数エラー");
             }
             //フィートからメートルへの対応表を出力
-            static void PrintFeettoMeterList(int start, int stop)
+            static void PrintFeetToMeterList(int start, int stop)
             {
-
-                FeetConverter converter = new FeetConverter();
                 {
                     for (int feet = 1; feet <= 10; feet++)
                     {
-                        double meter = converter.ToMeter(feet);
+                        double meter = FeetConverter.FromMeter(feet);
                         Console.WriteLine($"{feet}ft ={meter:0.0000}m");
                     }
                 }
-                static void PrintMeterToFeetList(int start, int stop)
-                {
-                    FeetConverter converter = new FeetConverter();
-                    //メートルからフィートへの対応表を出力
-                    for (int meter = 1; meter <= 10; meter++)
-                    {
-                        double feet = converter.FromMeter(meter);
-                        Console.WriteLine($"{meter}m ={feet:0.0000}ft");
-                    }
-                }
-
             }
+            static void PrintMeterToFeetList(int start, int stop)
+            {
+
+
+                for (int meter = 1; meter <= 10; meter++)
+                {
+                    double feet = FeetConverter.FromMeter(meter);
+                    Console.WriteLine($"{meter}m ={feet:0.0000}ft");
+                }
+            }
+
         }
 
-        private static void PrintMeterToFeetList(int start, int end)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
+
 

@@ -4,25 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DistanceConveter
-{
-    public class FeetConverter
-    {
+namespace DistanceConveter{
+    public class FeetConverter{
+        private static readonly double ratio = 0.3048; //定数
         //フィートからメートルを求める
-        public double FromMeter(double mater)
+        public static double FromMeter(double mater)
         {
-            return mater / 0.3048;
+            return mater / ratio;
         }
         //メートルからフィートを求める
-        public double ToFeet(double feet)
+        public static double ToFeet(double feet)
         {
-            return feet * 0.3048;
+            return feet * ratio;
         }
+    }
+}
 
-        internal double ToMeter(int feet)
-        {
-            throw new NotImplementedException();
-        }
-    }
-    }
 
