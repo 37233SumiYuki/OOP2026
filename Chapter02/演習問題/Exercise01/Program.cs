@@ -8,20 +8,29 @@ namespace Exercise01 {
             var songs = new List<Song>();
 
             Console.WriteLine("*****曲の登録*****");
-            Console.Write("曲名:");
-            string? title = Console.ReadLine();
+            while (true) {
 
-            Console.Write("アーティスト名:");
-            string? ArtistName = Console.ReadLine();
 
-            Console.Write("演奏時間:");
-            int length = int.Parse(Console.ReadLine());
+                Console.Write("曲名:");
+                string? title = Console.ReadLine();
 
-            var song = new Song(title, ArtistName, length);
+                if (title.Equals("end", StringComparison.OrdinalIgnoreCase))
+                    break;
+
+                Console.Write("アーティスト名:");
+                string? ArtistName = Console.ReadLine();
+
+                Console.Write("演奏時間:");
+                int length = int.Parse(Console.ReadLine());
+
+                var song = new Song(title, ArtistName, length);
 
                 songs.Add(song);
- 
-            PrintSongs(songs);
+
+                Console.WriteLine();
+
+                PrintSongs(songs);
+            }
         }
         private static void PrintSongs(List<Song> songs) {
 
