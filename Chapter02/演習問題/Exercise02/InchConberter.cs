@@ -15,5 +15,9 @@ namespace Exercise02 {
         public static double ToFeet(double inch) {
             return inch * ratio;
         }
+
+        internal static double ToMeter(int feet) {
+            throw new NotImplementedException();
+        }
     }
 }
