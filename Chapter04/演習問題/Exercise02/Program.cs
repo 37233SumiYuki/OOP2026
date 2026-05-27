@@ -12,7 +12,20 @@ namespace Exercise02 {
 
         private static void Exercise1() {
             //if-else文を使用
-            
+            var line = Console.ReadLine();
+            int num = int.Parse(line);
+            if (num > 0) {
+                Console.WriteLine(num);
+
+            } else if (num <= 0 || num >= 100) {
+                Console.WriteLine(num * 2);
+
+            } else if (num >= 100 || num <= 500) {
+                Console.WriteLine(num * 3);
+            }
+            if (num <= 500) {
+                Console.WriteLine(num);
+            }
         }
 
         private static void Exercise2() {
