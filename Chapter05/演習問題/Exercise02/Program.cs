@@ -1,9 +1,12 @@
 ﻿
 
 using Exercise01;
+using System.Net.NetworkInformation;
 
 namespace Exercise02 {
     internal class Program {
+        private static IEnumerable<object> addCollection;
+
         static void Main(string[] args) {
             // 5.2.1
             var ymCollection = new YearMonth[] {
@@ -53,8 +56,12 @@ namespace Exercise02 {
 
         private static void Exercise5(YearMonth[] ymCollection) {
 
-            var array = ymCollection.Select(ym => ym.AddOneMonth()).ToArray();
-            Exercise2(array);
+            var array = ymCollection
+                .Select(s => s.AddOneMonth())
+                .ToArray();
+            foreach (var ym in addCollection) {
+                Console.WriteLine(ym);
+            }
         }
     }
 }
