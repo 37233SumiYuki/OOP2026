@@ -25,12 +25,9 @@ namespace Exercise03 {
         }
 
         private static void Exercise1(string text) {
-            if(text == String.Empty) {
-                Console.WriteLine("A");
-            }
-            
+            var cnt = text.Count(s => s.Equals(' '));
+            Console.WriteLine("空白の数:" + cnt);
         }
-
         private static void Exercise2(string text) {
             
         }
