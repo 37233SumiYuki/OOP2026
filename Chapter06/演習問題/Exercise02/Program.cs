@@ -5,8 +5,8 @@
             string input = Console.ReadLine();
 
             if (int.TryParse(input, out int number)) {
-                var s1 = $"{number:#,0}";
-                Console.WriteLine(s1);
+             
+                Console.WriteLine($"{number:#,0}");
             } else {
                 Console.WriteLine("int型ではありません。");
             }
