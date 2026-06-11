@@ -1,4 +1,7 @@
 ﻿
+using System;
+using System.ComponentModel.DataAnnotations;
+
 namespace Exercise03 {
     internal class Program {
         static void Main(string[] args) {
@@ -44,12 +47,28 @@ namespace Exercise03 {
         }
 
         private static void Exercise5(string text) {
-
+           text.Split(' ').Where(s => s.Length <= 4).ToList().
+                ForEach(Console.WriteLine);           
             
         }
 
         private static void Exercise6(string text) {
-            
+            var str = text.ToLower().Replace(" ","");
+
+            //var alphDicCount = Enumerable.Range('a', 26).
+            //    ToDictionary(num => ((char)num).ToString(),num => 0);
+
+            var dict = new SortedDictionary<char, int>();
+            foreach (var c in str) {
+                if (dict.ContainsKey(c))
+                    dict[c]++;
+                else
+                    dict[c] = 1;
+            }
+            foreach(var word in dict) {
+                Console.WriteLine(word.Key + ":" + word.Value);
+            }
+
+            }
         }
     }
-}
