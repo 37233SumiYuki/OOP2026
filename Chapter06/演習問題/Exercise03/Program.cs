@@ -73,6 +73,10 @@ namespace Exercise03 {
             for (char ch = 'a'; ch <= 'z'; ch++) {
                 Console.WriteLine($"{ch}:{array[ch - 'a']}");
             }
+
+            for (char ch = 'a'; ch <= 'z'; ch++) {
+                Console.WriteLine($"{ch}: {text.Count(s => s.Equals(ch))}");
+            }
         }
     }
 }
