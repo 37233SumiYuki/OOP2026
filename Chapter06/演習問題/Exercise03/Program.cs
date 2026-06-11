@@ -34,11 +34,11 @@ namespace Exercise03 {
         private static void Exercise2(string text) {
             var replaced = text.Replace("big", "small");
             Console.WriteLine(replaced);
-            
+
         }
 
         private static void Exercise3(string text) {
-            
+
         }
 
         private static void Exercise4(string text) {
@@ -47,26 +47,32 @@ namespace Exercise03 {
         }
 
         private static void Exercise5(string text) {
-           text.Split(' ').Where(s => s.Length <= 4).ToList().
-                ForEach(Console.WriteLine);           
-            
+            text.Split(' ').Where(s => s.Length <= 4).ToList().
+                 ForEach(Console.WriteLine);
+
         }
 
         private static void Exercise6(string text) {
-            var str = text.ToLower().Replace(" ","");
+            var str = text.ToLower().Replace(" ", "");
 
             var alphDicCount = Enumerable.Range('a', 26).
-                ToDictionary(num => ((char)num),num => 0);
+                ToDictionary(num => ((char)num), num => 0);
 
             //var dict = new SortedDictionary<char, int>();
 
             foreach (var c in str) {
                 alphDicCount[c]++;
             }
-            foreach(var word in alphDicCount) {
+            foreach (var word in alphDicCount) {
                 Console.WriteLine(word.Key + ":" + word.Value);
             }
-
+            var array = Enumerable.Repeat(0, 26).ToArray();
+            foreach (var alph in str) {
+                array[alph - 'a']++;
+            }
+            for (char ch = 'a'; ch <= 'z'; ch++) {
+                Console.WriteLine($"{ch}:{array[ch - 'a']}");
             }
         }
     }
+}
