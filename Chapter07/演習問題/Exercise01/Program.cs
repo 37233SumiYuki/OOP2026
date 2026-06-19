@@ -1,4 +1,6 @@
-﻿namespace Exercise01 {
+﻿using System;
+
+namespace Exercise01 {
     internal class Program {
         static void Main(string[] args) {
             int[] numbers = [5, 10, 17, 9, 3, 21, 10, 40, 21, 3, 35];
@@ -27,15 +29,27 @@
         }
 
         private static void Exercise2(int[] numbers) {
-
+            var result = numbers.TakeLast(2);
+            foreach (var number in result) {
+                Console.WriteLine(number);
+            }
         }
 
         private static void Exercise3(int[] numbers) {
             //P173
+            var strings = numbers.Select(n => n.ToString("000")).ToArray();
+            foreach (var s in strings) {
+                Console.WriteLine(s);
+            }
         }
 
         private static void Exercise4(int[] numbers) {
             //P175
+            var sortedNum = numbers.OrderBy(x => x);
+            foreach (var i in sortedNum) {
+                Console.WriteLine(sortedNum);
+            }
+            
         }
 
         private static void Exercise5(int[] numbers) {
