@@ -45,15 +45,21 @@ namespace Exercise01 {
 
         private static void Exercise4(int[] numbers) {
             //P175
-            var sortedNum = numbers.OrderBy(x => x);
+            var sortedNum = numbers.OrderBy(x => x).Take(3);
             foreach (var i in sortedNum) {
-                Console.WriteLine(sortedNum);
+                Console.WriteLine(i);  
             }
             
         }
 
         private static void Exercise5(int[] numbers) {
             //P174
+            var results = numbers.Distinct();
+            var Counts = results.Count(x => x > 10);
+               Console.WriteLine(Counts);
+            }
+           }
+                
         }
-    }
-}
+   
+
