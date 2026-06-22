@@ -69,14 +69,18 @@ namespace Exercise02 {
         }
 
         private static void Exercise6(List<Book> books) {
-            var book = books.Where(b => b.Pages >= 400).OrderBy(b => b.Price);
-            Console.WriteLine(book);
-
-            
+            var selected = books.Where(b => b.Pages >= 400).OrderByDescending(b => b.Price);
+            foreach(var book in selected) {
+                Console.WriteLine("{0} {1}", book.Title, book.Price);
+            }
         }
 
         private static void Exercise7(List<Book> books) {
-            
+            var selected = books.Where(b => b.Title.Contains("C#") && b.Pages <= 500)
+                .Select(b => b.Title);
+            foreach (var title in selected) {
+                Console.WriteLine(title);
+            }
         }
     }
 }
