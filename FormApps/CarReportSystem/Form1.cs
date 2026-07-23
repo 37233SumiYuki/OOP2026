@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Xml;
 using static CarReportSystem.CarReport;
 
 namespace CarReportSystem {
@@ -81,7 +82,7 @@ namespace CarReportSystem {
         }
         private void dgvRecords_Click(object sender, EventArgs e) {
 
-         
+
         }
 
         private void SetRadioButtonMaker(MakerGroup targetMaker) {
@@ -140,7 +141,7 @@ namespace CarReportSystem {
         }
         private void btModifyRecord_Click(object sender, EventArgs e) {
 
-            if(dgvRecords.SelectedRows.Count == 0) {
+            if (dgvRecords.SelectedRows.Count == 0) {
                 tsslbMessage.Text = "修正するレポートを選択してください";
                 return;
             }
@@ -151,8 +152,8 @@ namespace CarReportSystem {
                 return;
             }
 
-                //カーレポート管理用リストの該当する要素のデータを書き換える
-                listCarReports[dgvRecords.CurrentRow.Index].Date = dtpDate.Value.Date;
+            //カーレポート管理用リストの該当する要素のデータを書き換える
+            listCarReports[dgvRecords.CurrentRow.Index].Date = dtpDate.Value.Date;
             listCarReports[dgvRecords.CurrentRow.Index].Author = cbAuthor.Text.Trim();
             listCarReports[dgvRecords.CurrentRow.Index].Meker = GetRadioButtonMaker();
             listCarReports[dgvRecords.CurrentRow.Index].CarName = cbCarName.Text;
@@ -177,7 +178,7 @@ namespace CarReportSystem {
             dtpDate.Value = carReport.Date;
             cbAuthor.Text = carReport.Author;
             SetRadioButtonMaker(carReport.Meker);
-            cbCarName.Text =carReport.CarName;
+            cbCarName.Text = carReport.CarName;
             tbReport.Text = carReport.Report;
             pbPicture.Image = carReport.Picture;
 
@@ -192,6 +193,15 @@ namespace CarReportSystem {
         private void 色設定ToolStripMenuItem_Click(object sender, EventArgs e) {
             if (cdColor.ShowDialog() == DialogResult.OK) {
                 BackColor = cdColor.Color;
+            }
+        }
+        //フォームが閉じたら呼ばれるイベントハンドラ
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e) {
+            //設定ファイルへ色情報を保存する処理
+            //P２８４以降を参考にする(ファイル名:setting.xml)
+
+            using (var write = XmlWriter.Create("setting.xml")) {
+                var serializer = new Xm
             }
         }
     }
