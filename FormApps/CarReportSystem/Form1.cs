@@ -181,7 +181,9 @@ namespace CarReportSystem {
         }
 
         private void êFê›íËToolStripMenuItem_Click(object sender, EventArgs e) {
-
+            if (cdColor.ShowDialog() == DialogResult.OK) {
+                BackColor = cdColor.Color;
+            }
         }
     }
 }
