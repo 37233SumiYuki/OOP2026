@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Xml;
+using System.Xml.Serialization;
 using static CarReportSystem.CarReport;
 
 namespace CarReportSystem {
@@ -8,13 +9,37 @@ namespace CarReportSystem {
         //カーレポート管理用リスト
         BindingList<CarReport> listCarReports = new BindingList<CarReport>();
 
+        //設定クラスのオブジェクトを生成
+        Settings settings = new Settings();
+
         public Form1() {
             InitializeComponent();
             dgvRecords.DataSource = listCarReports;
         }
 
         private void Form1_Load(object sender, EventArgs e) {
+            //設定ファイルを読み込み背景を設定する（逆シリアル化）
+            //P286以降を参考にする（ファイル名:setting.xml)
 
+            //ファイルが存在するか？
+            if (File.Exists("setting.xml") ) {
+                try {
+                    using (var reader = XmlReader.Create("setting.xml")) {
+                        var serializer = new XmlSerializer(typeof(Settings));
+                        var settings = serializer.Deserialize(reader) as Settings;
+                        //背景色設定
+                        BackColor = Color.FromArgb(settings.MainFormBackColor);
+
+                    }
+                }
+
+                catch (Exception ex) {
+                    tsslbMessage.Text = "設定ファイル読み込みエラー";
+                    MessageBox.Show(ex.Message);//←より具体的なエラーを出力
+                }
+            } else {
+                tsslbMessage.Text = "設定ファイルがありません";
+            }
         }
 
         //追加ボタンイベントハンドラ
@@ -32,7 +57,7 @@ namespace CarReportSystem {
             var carReport = new CarReport {
                 Date = dtpDate.Value.Date,
                 Author = cbAuthor.Text.Trim(),
-                Meker = GetRadioButtonMaker(),
+                Maker = GetRadioButtonMaker(),
                 CarName = cbCarName.Text.Trim(),
                 Report = tbReport.Text,
                 Picture = pbPicture.Image,
@@ -43,9 +68,8 @@ namespace CarReportSystem {
             SetCbAuthor(cbAuthor.Text.Trim());
             SetCbCarName(cbCarName.Text.Trim());
 
-            dgvRecords.CurrentRow.Selected = false;//セルの選択を解除する
-
-            ImputItemsUpdate(); //データグリッドビューを更新したら呼ぶメソッド
+            dgvRecords.ClearSelection(); //セルの選択を解除する
+            InputItemsUpdate(); //データグリッドビューを更新したら呼ぶメソッド
         }
 
         private MakerGroup GetRadioButtonMaker() {
@@ -68,9 +92,9 @@ namespace CarReportSystem {
             }
         }
         private void btNewInput_Click(object sender, EventArgs e) {
-            ImputItemsAllClear();
+            InputItemsAllClear();
         }
-        private void ImputItemsAllClear() {
+        private void InputItemsAllClear() {
             dtpDate.Value = DateTime.Today;
             cbAuthor.Text = string.Empty;
             rbOther.Checked = true;
@@ -78,11 +102,7 @@ namespace CarReportSystem {
             tbReport.Text = string.Empty;
             pbPicture.Image = null;
 
-            dgvRecords.CurrentRow.Selected = false;
-        }
-        private void dgvRecords_Click(object sender, EventArgs e) {
-
-
+            dgvRecords.ClearSelection();//セルの選択を解除する
         }
 
         private void SetRadioButtonMaker(MakerGroup targetMaker) {
@@ -132,12 +152,12 @@ namespace CarReportSystem {
             //削除したいインデックスを指定してリストから削除
             listCarReports.RemoveAt(dgvRecords.CurrentRow.Index);
 
-            ImputItemsUpdate(); //データグリッドビューを更新したら呼ぶメソッド
+            InputItemsUpdate(); //データグリッドビューを更新したら呼ぶメソッド
         }
         //データグリッドビューを更新したら呼ぶメソッド
-        private void ImputItemsUpdate() {
+        private void InputItemsUpdate() {
             if (!dgvRecords.CurrentRow.Selected)
-                ImputItemsAllClear();
+                InputItemsAllClear();
         }
         private void btModifyRecord_Click(object sender, EventArgs e) {
 
@@ -146,8 +166,8 @@ namespace CarReportSystem {
                 return;
             }
 
-            if (String.IsNullOrWhiteSpace(cbAuthor.Text) ||
-                String.IsNullOrWhiteSpace(cbCarName.Text)) {
+            if (String.IsNullOrWhiteSpace(cbAuthor.Text)
+                    || String.IsNullOrWhiteSpace(cbCarName.Text)) {
                 tsslbMessage.Text = "記録者、または車名が未入力です";
                 return;
             }
@@ -155,53 +175,53 @@ namespace CarReportSystem {
             //カーレポート管理用リストの該当する要素のデータを書き換える
             listCarReports[dgvRecords.CurrentRow.Index].Date = dtpDate.Value.Date;
             listCarReports[dgvRecords.CurrentRow.Index].Author = cbAuthor.Text.Trim();
-            listCarReports[dgvRecords.CurrentRow.Index].Meker = GetRadioButtonMaker();
-            listCarReports[dgvRecords.CurrentRow.Index].CarName = cbCarName.Text;
+            listCarReports[dgvRecords.CurrentRow.Index].Maker = GetRadioButtonMaker();
+            listCarReports[dgvRecords.CurrentRow.Index].CarName = cbCarName.Text.Trim();
             listCarReports[dgvRecords.CurrentRow.Index].Report = tbReport.Text;
             listCarReports[dgvRecords.CurrentRow.Index].Picture = pbPicture.Image;
 
             SetCbAuthor(cbAuthor.Text.Trim());
-            SetCbAuthor(cbCarName.Text.Trim());
+            SetCbCarName(cbCarName.Text.Trim());
 
             dgvRecords.Refresh();   //データグリッドビューの更新
-
-            tsslbMessage.Text = "レポートを修正しました。";
-            tsslbMessage.Text = null;
+            tsslbMessage.Text = "レポートを修正しました";
         }
 
-        private void dgvRecords_CellContentClick(object sender, DataGridViewCellEventArgs e) {
+        private void dgvRecords_SelectionChanged(object sender, EventArgs e) {
+
             if ((dgvRecords.CurrentRow?.DataBoundItem is not CarReport carReport)
-                || (!dgvRecords.CurrentRow.Selected)) return;
-
-
+                    || (!dgvRecords.CurrentRow.Selected)) return;
 
             dtpDate.Value = carReport.Date;
             cbAuthor.Text = carReport.Author;
-            SetRadioButtonMaker(carReport.Meker);
+            SetRadioButtonMaker(carReport.Maker);
             cbCarName.Text = carReport.CarName;
             tbReport.Text = carReport.Report;
             pbPicture.Image = carReport.Picture;
 
-            ImputItemsUpdate(); //データグリッドビューを更新したら呼ぶメソッド
+            InputItemsUpdate(); //データグリッドビューを更新したら呼ぶメソッド
         }
 
         private void 終了ToolStripMenuItem_Click(object sender, EventArgs e) {
             Application.Exit();
-
         }
 
         private void 色設定ToolStripMenuItem_Click(object sender, EventArgs e) {
             if (cdColor.ShowDialog() == DialogResult.OK) {
                 BackColor = cdColor.Color;
+                //変更された色の情報を保存
+                settings.MainFormBackColor = cdColor.Color.ToArgb();
             }
         }
+
         //フォームが閉じたら呼ばれるイベントハンドラ
         private void Form1_FormClosed(object sender, FormClosedEventArgs e) {
-            //設定ファイルへ色情報を保存する処理
-            //P２８４以降を参考にする(ファイル名:setting.xml)
+            //設定ファイルへ色情報を保存する処理（シリアル化）
+            //P284以降を参考にする（ファイル名：setting.xml）
 
-            using (var write = XmlWriter.Create("setting.xml")) {
-                var serializer = new Xm
+            using (var writer = XmlWriter.Create("setting.xml")) {
+                var serializer = new XmlSerializer(settings.GetType());
+                serializer.Serialize(writer, settings);
             }
         }
     }
