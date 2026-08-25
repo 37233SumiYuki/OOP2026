@@ -1,41 +1,48 @@
-﻿namespace Test01_01 {
-    public class ScoreCounter {
+﻿namespace Test01_01
+{
+    public class ScoreCounter
+    {
         private IEnumerable<Student> _score;
 
-        // コンストラクタ
-        public ScoreCounter(string filePath) {
+        public ScoreCounter(string filePath)
+        {
             _score = ReadScore(filePath);
         }
 
-        //メソッドの概要：
-        private static IEnumerable<Student> ReadScore(string filePath) {
-            var sales = new List<Student>();
+        private static IEnumerable<Student> ReadScore(string filePath)
+        {
+            var list = new List<Student>();
             var lines = File.ReadAllLines(filePath);
-            foreach (string line in lines) {
-                var items = line.Split(',');   //カンマ区切りで分割
-                var sale = new Student {
+
+            foreach (string line in lines)
+            {
+                var items = line.Split(',');
+
+                var student = new Student
+                {
                     Name = items[0],
                     Subject = items[1],
-                    Score = int.Parse(items[2]),
+                    Score = int.Parse(items[2])
                 };
-                sales.Add(sale);
+
+                list.Add(student);
             }
-            return sales;
+
+            return list;
         }
 
-        //メソッドの概要：
-        public IDictionary<string, int> GetPerStudentScore() {
+        public IDictionary<string, int> GetPerSubjectScore()
+        {
             var dict = new Dictionary<string, int>();
 
-            foreach (var sale in _score) {
-                
-                if (dict.ContainsKey(sale.Name))
-                   
-                    dict[sale.Name] += sale.Score; 
+            foreach (var s in _score)
+            {
+                if (dict.ContainsKey(s.Subject))
+                    dict[s.Subject] += s.Score;
                 else
-                   
-                    dict[sale.Name] = sale.Score;  
+                    dict[s.Subject] = s.Score;
             }
+
             return dict;
         }
     }
