@@ -22,7 +22,7 @@ namespace CarReportSystem {
             //P286以降を参考にする（ファイル名:setting.xml)
 
             //ファイルが存在するか？
-            if (File.Exists("setting.xml") ) {
+            if (File.Exists("setting.xml")) {
                 try {
                     using (var reader = XmlReader.Create("setting.xml")) {
                         var serializer = new XmlSerializer(typeof(Settings));
@@ -223,6 +223,16 @@ namespace CarReportSystem {
                 var serializer = new XmlSerializer(settings.GetType());
                 serializer.Serialize(writer, settings);
             }
+        }
+
+        private void 保存ToolStripMenuItem_Click(object sender, EventArgs e) {
+
+        }
+        //ファイルセーブ処理
+        private void reportSaveFile() { 
+        }
+        //ファイルリード処理
+        private void reportOpenFile() { 
         }
     }
 }
