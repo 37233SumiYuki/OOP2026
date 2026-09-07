@@ -10,6 +10,7 @@ namespace CarReportSystem {
 
         //カーレポート管理用リスト
         BindingList<CarReport> listCarReports = new BindingList<CarReport>();
+        private Settings settings;
 
         //設定クラスのオブジェクトを生成
         //Settings settings = Settings.Instance;
