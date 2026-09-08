@@ -1,6 +1,5 @@
 using System.ComponentModel;
 using System.Reflection.Metadata.Ecma335;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml;
 using System.Xml.Serialization;
 using static CarReportSystem.CarReport;
@@ -12,8 +11,8 @@ namespace CarReportSystem {
         BindingList<CarReport> listCarReports = new BindingList<CarReport>();
         private Settings settings;
 
-        //設定クラスのオブジェクトを生成
-        //Settings settings = Settings.Instance;
+        private CarReportRepository repository =
+            new CarReportRepository();
 
         public Form1() {
             InitializeComponent();
@@ -21,8 +20,11 @@ namespace CarReportSystem {
         }
 
         private void Form1_Load(object sender, EventArgs e) {
-            //設定ファイルを読み込み背景色を設定する（逆シリアル化）
-            //P286以降を参考にする(ファイル名：setting.xml)
+            listCarReports =
+                   new BindingList<CarReport>(
+                       repository.GetAll());
+
+            dgvRecords.DataSource = listCarReports;
 
             //ファイルが存在するか？
             if (File.Exists("setting.xml")) {
@@ -66,6 +68,8 @@ namespace CarReportSystem {
                 Report = tbReport.Text,
                 Picture = pbPicture.Image,
             };
+            repository.Add(carReport);
+
             listCarReports.Add(carReport);
 
             //入力履歴を登録
@@ -85,7 +89,7 @@ namespace CarReportSystem {
                 return MakerGroup.ホンダ;
             if (rbSubaru.Checked)
                 return MakerGroup.スバル;
-            if (rbNissan.Checked)
+            if (rbImport.Checked)
                 return MakerGroup.輸入車;
 
             return MakerGroup.その他;
@@ -158,11 +162,13 @@ namespace CarReportSystem {
 
             //選択されているインデックスを取得
             //削除したいインデックスを指定してリストから削除
-            
-            if(dgvRecords.CurrentRow?.DataBoundItem is not CarReport carReport) {
+
+            if (dgvRecords.CurrentRow?.DataBoundItem is not CarReport carReport) {
                 tsslbMessage.Text = "削除するレポートを選択してください";
                 return;
             }
+            repository.Delete(carReport.Id);
+
             listCarReports.Remove(carReport);
 
 
@@ -172,7 +178,7 @@ namespace CarReportSystem {
 
         //データグリッドビューを更新したら呼ぶメソッド
         private void InputItemUpdate() {
-            if (　dgvRecords.CurrentRow is null || 
+            if (dgvRecords.CurrentRow is null ||
                 !dgvRecords.CurrentRow.Selected)
                 InputItemsAllClear();
         }
@@ -203,6 +209,7 @@ namespace CarReportSystem {
             listCarReports[dgvRecords.CurrentRow.Index].CarName = cbCarName.Text.Trim();
             listCarReports[dgvRecords.CurrentRow.Index].Report = tbReport.Text;
             listCarReports[dgvRecords.CurrentRow.Index].Picture = pbPicture.Image;
+            repository.Update(listCarReports[dgvRecords.CurrentRow.Index]);
 
             SetCbAuthor(cbAuthor.Text.Trim());
             SetCbCarName(cbCarName.Text.Trim());
@@ -245,65 +252,6 @@ namespace CarReportSystem {
             using (var writer = XmlWriter.Create("setting.xml")) {
                 var serializer = new XmlSerializer(Settings.Instance.GetType());
                 serializer.Serialize(writer, Settings.Instance);
-            }
-        }
-
-        private void 保存ToolStripMenuItem_Click(object sender, EventArgs e) {
-            reportSaveFile();
-        }
-
-        private void 開くToolStripMenuItem_Click(object sender, EventArgs e) {
-            reportOpenFile();
-        }
-
-        //ファイルセーブ処理
-        private void reportSaveFile() {
-            if (sfdReportFileSave.ShowDialog() == DialogResult.OK) {
-                try {
-                    //バイナリ形式でシリアル化
-#pragma warning disable SYSLIB0011
-                    var bf = new BinaryFormatter();
-#pragma warning restore SYSLIB0011
-                    using (FileStream fs = File.Open(sfdReportFileSave.FileName, FileMode.Create))
-                        bf.Serialize(fs, listCarReports);
-                }
-                catch (Exception ex) {
-                    tsslbMessage.Text = "ファイル書き出しエラー";
-                    MessageBox.Show(ex.Message);
-                }
-            }
-        }
-
-        //ファイルオープン処理
-        private void reportOpenFile() {
-            if (ofdReportFileOpen.ShowDialog() == DialogResult.OK) {
-                try {
-                    //逆シリアル化でバイナリ形式を取り込む
-#pragma warning disable SYSLIB0011
-                    var bf = new BinaryFormatter();
-#pragma warning restore SYSLIB0011
-                    using (FileStream fs = File.Open(
-                        ofdReportFileOpen.FileName,
-                        FileMode.Open,
-                        FileAccess.Read
-                        )) {
-                        listCarReports = (BindingList<CarReport>)bf.Deserialize(fs);
-                        dgvRecords.DataSource = listCarReports;
-                    }
-                    //コンボボックスの履歴をすべて消す
-                    cbAuthor.Items.Clear();
-                    cbCarName.Items.Clear();
-
-                    //コンボボックスの履歴を再登録
-                    foreach (var report in listCarReports) {
-                        SetCbAuthor(report.Author);
-                        SetCbCarName(report.CarName);
-                    }
-                }
-                catch (Exception ex) {
-                    tsslbMessage.Text = "ファイル書き出しエラー";
-                    MessageBox.Show(ex.Message);
-                }
             }
         }
     }

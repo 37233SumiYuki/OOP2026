@@ -1,6 +1,6 @@
-﻿using CarReportSystem;
+﻿
 using Microsoft.Data.Sqlite;
-using System.ComponentModel.Design;
+
 using System.Drawing.Imaging;
 using System.Globalization;
 
@@ -68,6 +68,8 @@ public class CarReportRepository {
         command.Parameters.AddWithValue("$maker", (int)report.Maker);
         command.Parameters.AddWithValue("$carName", report.CarName);
         command.Parameters.AddWithValue("$report", report.Report);
+        command.Parameters.AddWithValue("$picture", (object?)ImageToBytes(report.Picture) ??
+            DBNull.Value);
 
         command.ExecuteNonQuery();
     }
@@ -87,6 +89,7 @@ public class CarReportRepository {
                     Maker = $maker,
                     CarName = $carName,
                     Report = $report
+                    Picture = $picture
                 WHERE Id = $id;
                 """;
 
@@ -96,6 +99,7 @@ public class CarReportRepository {
         command.Parameters.AddWithValue("$maker", (int)report.Maker);
         command.Parameters.AddWithValue("$carName", report.CarName);
         command.Parameters.AddWithValue("$report", report.Report);
+        command.Parameters.AddWithValue("$picture", ImageToBytes(report.Picture));
 
         command.ExecuteNonQuery();
     }
