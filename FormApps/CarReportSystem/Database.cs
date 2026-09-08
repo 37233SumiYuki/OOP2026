@@ -6,7 +6,7 @@ namespace CarReportSystem;
 public static class Database {
     //DBファイルの保存場所
     private static readonly string DatabasePath =
-        Path.Combine(AppContext.BaseDirectory, "products.db");
+        Path.Combine(AppContext.BaseDirectory, "carreport.db");
 
     // SQLiteへ接続するための接続文字列
     private static readonly string ConnectionString =
@@ -42,7 +42,7 @@ public static class Database {
               Maker      INTEGER NOT NULL,
               CarName    TEXT    NOT NULL,
               Report     TEXT    NOT NULL,
-              Pricture   BLOB
+              Picture   BLOB
               );
             """;
 

@@ -4,12 +4,12 @@ using System.ComponentModel.Design;
 using System.Drawing.Imaging;
 using System.Globalization;
 
-namespace SQLiteProductSample;
+namespace CarReportSystem;
 
 // Productsテーブルに対するDB操作をまとめたクラス
 // CRUD（Create / Read / Update / Delete）を担当する
 public class CarReportRepository {
-    // 全商品を取得する。Read（SELECT）に相当する
+    // 全レポートを取得する。Read（SELECT）に相当する
     public List<CarReport> GetAll() {
 
         var carReports = new List<CarReport>();
@@ -23,7 +23,7 @@ public class CarReportRepository {
         // Productsテーブルを作るSQL
         command.CommandText =
             """
-            SELECT Id, Date, Author, Maker, CarName, Report
+            SELECT Id, Date, Author, Maker, CarName, Report, Picture
             FROM CarReports
             ORDER BY Id;
             """;
@@ -31,21 +31,23 @@ public class CarReportRepository {
         // SELECTを実行し、複数行の検索結果を読み取る
         using var reader = command.ExecuteReader();
 
-        while (reader.Read()) {
-            CarReport report = new CarReport();
-
-            report.Id = reader.GetInt32(0);
-            report.Date = DateTime.ParseExact(reader.GetString(1),"yyyy-MM-dd",CultureInfo.InvariantCulture);
-            report.Author = reader.GetString(2);
-            report.Maker = (CarReport.MakerGroup)reader.GetInt32(3);
-            report.CarName = reader.GetString(4);
-            report.Report = reader.GetString(5);
-            report.Picture = BytesToImage((byte[])reader["Picture"]);
-
-
-            carReports.Add(report);
+       while (reader.Read()) {
+            carReports.Add(new CarReport {
+                Id = reader.GetInt32(0),
+                Date = DateTime.ParseExact(
+                    reader.GetString(1),
+                    "yyyy-MM-dd",
+                    CultureInfo.InvariantCulture),
+                Author = reader.GetString(2),
+                Maker = (CarReport.MakerGroup)reader.GetInt32(3),
+                CarName = reader.GetString(4),
+                Report = reader.GetString(5),
+                Picture = reader.IsDBNull(6) ? null :
+                BytesToImage(reader.GetFieldValue<byte[]>(6))
+            });
         }
         return carReports;
+
     }
     public void Add(CarReport report) {
         using var connection = Database.GetConnection();
@@ -56,9 +58,9 @@ public class CarReportRepository {
         command.CommandText =
             """
                 INSERT INTO CarReports
-                (Date, Author, Maker, CarName, Report)
+                (Date, Author, Maker, CarName, Report, Picture)
                 VALUES
-                ($date, $author, $maker, $carName, $report);
+                ($date, $author, $maker, $carName, $report, $picture);
                 """;
 
         command.Parameters.AddWithValue("$date", report.Date.ToString("yyyy-MM-dd"));
