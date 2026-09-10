@@ -23,12 +23,10 @@ public partial class Form1 : Form {
 
     }
 
-    private void btAdd_Click(object sender, EventArgs e) 
-     {
+    private void btAdd_Click(object sender, EventArgs e) {
         if (!TryGetInput(out string name, out int price))
             return;
-        try 
-            {
+        try {
             _repository.Add(name, price);
 
             ReloadProducts();
@@ -42,7 +40,7 @@ public partial class Form1 : Form {
     }
 
     private void btUpdate_Click(object sender, EventArgs e) {
-        if(dgvProducts.CurrentRow?.DataBoundItem is not Product selectedProduct) {
+        if (dgvProducts.CurrentRow?.DataBoundItem is not Product selectedProduct) {
             tsslMessage.Text = "修正する商品を選択してください。";
             return;
         }
@@ -149,6 +147,10 @@ public partial class Form1 : Form {
     }
 
     private void tbName_TextChanged(object sender, EventArgs e) {
+
+    }
+
+    private void dgvProducts_CellContentClick(object sender, DataGridViewCellEventArgs e) {
 
     }
 }

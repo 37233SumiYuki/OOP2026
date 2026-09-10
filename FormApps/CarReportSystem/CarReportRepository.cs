@@ -72,6 +72,8 @@ public class CarReportRepository {
             DBNull.Value);
 
         command.ExecuteNonQuery();
+
+        
     }
 
 
@@ -88,7 +90,7 @@ public class CarReportRepository {
                     Author = $author,
                     Maker = $maker,
                     CarName = $carName,
-                    Report = $report
+                    Report = $report,
                     Picture = $picture
                 WHERE Id = $id;
                 """;

@@ -133,9 +133,10 @@ namespace CarReportSystem {
                 case MakerGroup.輸入車:
                     rbImport.Checked = true;
                     break;
-                default:
+                case MakerGroup.その他:
                     rbOther.Checked = true;
                     break;
+
             }
         }
 
@@ -243,6 +244,7 @@ namespace CarReportSystem {
                 Settings.Instance.MainFormBackColor = cdColor.Color.ToArgb();
             }
         }
+
 
         //フォームが閉じたら呼ばれるイベントハンドラ
         private void Form1_FormClosed(object sender, FormClosedEventArgs e) {
