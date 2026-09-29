@@ -68,6 +68,7 @@
             cdColor = new ColorDialog();
             sfdReportFileSave = new SaveFileDialog();
             ofdReportFileOpen = new OpenFileDialog();
+            このアプリについてToolStripMenuItem = new ToolStripMenuItem();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvRecords).BeginInit();
@@ -462,6 +463,7 @@
             // 
             // ヘルプHToolStripMenuItem
             // 
+            ヘルプHToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { このアプリについてToolStripMenuItem });
             ヘルプHToolStripMenuItem.Name = "ヘルプHToolStripMenuItem";
             ヘルプHToolStripMenuItem.Size = new Size(65, 20);
             ヘルプHToolStripMenuItem.Text = "ヘルプ(&H)";
@@ -489,6 +491,13 @@
             // ofdReportFileOpen
             // 
             ofdReportFileOpen.FileName = "openFileDialog1";
+            // 
+            // このアプリについてToolStripMenuItem
+            // 
+            このアプリについてToolStripMenuItem.Name = "このアプリについてToolStripMenuItem";
+            このアプリについてToolStripMenuItem.Size = new Size(180, 22);
+            このアプリについてToolStripMenuItem.Text = "このアプリについて";
+            このアプリについてToolStripMenuItem.Click += このアプリについてToolStripMenuItem_Click;
             // 
             // Form1
             // 
@@ -522,7 +531,6 @@
             MainMenuStrip = menuStrip1;
             MaximizeBox = false;
             Name = "Form1";
-            Text = "試乗レポート管理システム";
             FormClosed += Form1_FormClosed;
             Load += Form1_Load;
             groupBox1.ResumeLayout(false);
@@ -586,5 +594,6 @@
         private ColorDialog cdColor;
         private SaveFileDialog sfdReportFileSave;
         private OpenFileDialog ofdReportFileOpen;
+        private ToolStripMenuItem このアプリについてToolStripMenuItem;
     }
 }

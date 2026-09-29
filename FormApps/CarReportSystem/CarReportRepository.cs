@@ -73,8 +73,10 @@ public class CarReportRepository {
 
         command.ExecuteNonQuery();
 
-        
+        command.CommandText = "SELECT last_insert_rowid();";
+        report.Id = Convert.ToInt32(command.ExecuteScalar());
     }
+
 
 
     public void Update(CarReport report) {

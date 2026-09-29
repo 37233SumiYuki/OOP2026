@@ -24,6 +24,9 @@ namespace CarReportSystem {
                    new BindingList<CarReport>(
                        repository.GetAll());
 
+            SetCbAuthor(sender.Author);
+            SetCbCarName(sender.CarName);
+
             dgvRecords.DataSource = listCarReports;
 
             //ファイルが存在するか？
@@ -255,6 +258,10 @@ namespace CarReportSystem {
                 var serializer = new XmlSerializer(Settings.Instance.GetType());
                 serializer.Serialize(writer, Settings.Instance);
             }
+        }
+
+        private void このアプリについてToolStripMenuItem_Click(object sender, EventArgs e) {
+            
         }
     }
 }
