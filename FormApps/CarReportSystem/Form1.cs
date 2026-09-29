@@ -1,15 +1,22 @@
+using CarReportSystem;
 using System.ComponentModel;
 using System.Reflection.Metadata.Ecma335;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml;
 using System.Xml.Serialization;
+
+
 using static CarReportSystem.CarReport;
+
 
 namespace CarReportSystem {
     public partial class Form1 : Form {
 
         //カーレポート管理用リスト
         BindingList<CarReport> listCarReports = new BindingList<CarReport>();
+
+        private Settings settings;
+        private CarReportRepository repository =
+                new CarReportRepository();
 
         //設定クラスのオブジェクトを生成
         //Settings settings = Settings.Instance;
@@ -20,25 +27,36 @@ namespace CarReportSystem {
         }
 
         private void Form1_Load(object sender, EventArgs e) {
-            //設定ファイルを読み込み背景色を設定する（逆シリアル化）
-            //P286以降を参考にする(ファイル名：setting.xml)
+            // SQLiteからレポート一覧取得
+            listCarReports =
+                new BindingList<CarReport>(
+                    repository.GetAll());
 
-            //ファイルが存在するか？
+            dgvRecords.DataSource = listCarReports;
+
+            // 履歴を再構築
+            foreach (var report in listCarReports) {
+                SetCbAuthor(report.Author);
+                SetCbCarName(report.CarName);
+            }
+
+            // 設定ファイル読込
             if (File.Exists("setting.xml")) {
                 try {
                     using (var reader = XmlReader.Create("setting.xml")) {
                         var serializer = new XmlSerializer(typeof(Settings));
-                        //settings = serializer.Deserialize(reader) as Settings;
+
                         if (serializer.Deserialize(reader) is Settings loadedSettings) {
                             settings = loadedSettings;
-                            //背景色設定
-                            BackColor = Color.FromArgb(Settings.Instance.MainFormBackColor);
+
+                            BackColor =
+                                Color.FromArgb(Settings.Instance.MainFormBackColor);
                         }
                     }
                 }
                 catch (Exception ex) {
                     tsslbMessage.Text = "設定ファイル読み込みエラー";
-                    MessageBox.Show(ex.Message);//←より具体的なエラーの出力
+                    MessageBox.Show(ex.Message);
                 }
             } else {
                 tsslbMessage.Text = "設定ファイルがありません";
@@ -84,7 +102,7 @@ namespace CarReportSystem {
                 return MakerGroup.ホンダ;
             if (rbSubaru.Checked)
                 return MakerGroup.スバル;
-            if (rbNissan.Checked)
+            if (rbImport.Checked)
                 return MakerGroup.輸入車;
 
             return MakerGroup.その他;
@@ -171,7 +189,7 @@ namespace CarReportSystem {
 
         //データグリッドビューを更新したら呼ぶメソッド
         private void InputItemUpdate() {
-            if (　dgvRecords.CurrentRow is null || 
+            if (dgvRecords.CurrentRow is null || 
                 !dgvRecords.CurrentRow.Selected)
                 InputItemsAllClear();
         }
@@ -247,24 +265,11 @@ namespace CarReportSystem {
             }
         }
 
-        private void 保存ToolStripMenuItem_Click(object sender, EventArgs e) {
-            reportSaveFile();
-        }
-
-        private void 開くToolStripMenuItem_Click(object sender, EventArgs e) {
-            reportOpenFile();
-        }
 
         //ファイルセーブ処理
         private void reportSaveFile() {
             if (sfdReportFileSave.ShowDialog() == DialogResult.OK) {
                 try {
-                    //バイナリ形式でシリアル化
-#pragma warning disable SYSLIB0011
-                    var bf = new BinaryFormatter();
-#pragma warning restore SYSLIB0011
-                    using (FileStream fs = File.Open(sfdReportFileSave.FileName, FileMode.Create))
-                        bf.Serialize(fs, listCarReports);
                 }
                 catch (Exception ex) {
                     tsslbMessage.Text = "ファイル書き出しエラー";
@@ -277,17 +282,14 @@ namespace CarReportSystem {
         private void reportOpenFile() {
             if (ofdReportFileOpen.ShowDialog() == DialogResult.OK) {
                 try {
-                    //逆シリアル化でバイナリ形式を取り込む
-#pragma warning disable SYSLIB0011
-                    var bf = new BinaryFormatter();
-#pragma warning restore SYSLIB0011
+  
+
                     using (FileStream fs = File.Open(
                         ofdReportFileOpen.FileName,
                         FileMode.Open,
                         FileAccess.Read
                         )) {
-                        listCarReports = (BindingList<CarReport>)bf.Deserialize(fs);
-                        dgvRecords.DataSource = listCarReports;
+                       
                     }
                     //コンボボックスの履歴をすべて消す
                     cbAuthor.Items.Clear();
