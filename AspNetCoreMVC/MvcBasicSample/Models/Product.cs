@@ -1,7 +1,12 @@
-﻿namespace MvcBasicSample.Models {
-    //商品一件の名前と価値をまとめる
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MvcBasicSample.Models;
+
     public class Product {
-        public string Name { get; set; } = string.Empty;
-        public int Price { get; set; }
+    public int Id { get; set; }//主キー
+
+    [Required] //必須項目
+    public string Name { get; set; } = string.Empty;
+        public int Price { get; set; } //   円単位の価格
     }
-}
+
