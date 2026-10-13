@@ -12,6 +12,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var app = builder.Build();
 
+// ’Ç‰Á
+if (app.Environment.IsDevelopment()) {
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await SeedData.InitializeAsync(db);
+}
+
+
 if (!app.Environment.IsDevelopment()) {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
@@ -27,3 +35,6 @@ app.MapControllerRoute(
     pattern: "{controller=Menu}/{action=Index}/{id?}");            // Šù’è‰æ–Ê‚ðMenu‚É‚·‚é 
 
 app.Run();
+
+
+
