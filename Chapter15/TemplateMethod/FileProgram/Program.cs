@@ -1,32 +1,24 @@
-﻿using TextFileProcessoer;
+﻿using TextFileProcessor;
 
-Console.Write("カウントしたい単語：");
-WordCounterProcessor.Word = Console.ReadLine();
 
-string path = @"C:\Users\infosys\source\repos\OOP2026\Chapter15\TemplateMethod\FileProgram\Program.cs";
+string path = @"C:\Users\infosys\source\repos\OOP2026\Chapter14\Section04\Program.cs";
+TextProcessor.Run<LineCounterProcessor>(path);
 
-TextProcessor.Run<WordCounterProcessor>(path);
 
-public class WordCounterProcessor : TextProcessor {
-
-    public static string Word { get; set; } = "";
+public class LineCounterProcessor : TextProcessor {
 
     private int _count = 0;
+    private string _searchWord = "";
 
-    protected override void Initializer(string fname) {
+    protected override void Initialize(string fname){
         _count = 0;
+        Console.Write("カウントしたい単語：");
+        _searchWord = Console.ReadLine();
     }
 
-    protected override void Execute(string line) {
-        int index = 0;
+    protected override void Execute(string line) =>
+        _count += line.Split(_searchWord).Length - 1;
 
-        while ((index = line.IndexOf(Word, index)) != -1) {
-            _count++;
-            index += Word.Length;
-        }
-    }
-
-    protected override void Terminate() {
-        Console.WriteLine($"「{Word}」は{_count}つ出現します。");
-    }
+    protected override void Terminate() =>
+        Console.WriteLine($"「{_searchWord}」は {_count} つ出現します");
 }
