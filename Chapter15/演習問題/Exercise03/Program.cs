@@ -1,0 +1,5 @@
+﻿using TextFileProcessorDI;
+
+var service = new Take20Processor();
+var processor = new TextFileProcessor(service);
+processor.Run(@"C:\Users\infosys\source\repos\OOP2026\Chapter15\演習問題\Exercise03\枕草子.txt");
