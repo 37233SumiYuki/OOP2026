@@ -2,14 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using SelfOrderSystem.Data;
 using SelfOrderSystem.ViewModels;
+using SelfOrderSystem.Services;
 
 namespace SelfOrderSystem.Controllers;
 
 public class MenuController : Controller {
-    private readonly AppDbContext _db;                            // DB操作用 
+    private readonly AppDbContext _db;
+    private readonly CartService _cart;
 
-    public MenuController(AppDbContext db) {
-        _db = db;                                                 // DIで受け取る 
+    public MenuController(AppDbContext db, CartService cart) {
+        _db = db;
+        _cart = cart;
     }
 
     public async Task<IActionResult> Index(int? categoryId) {
@@ -32,16 +35,16 @@ public class MenuController : Controller {
             .ThenBy(p => p.Name)
             .ToListAsync();
 
+        var cartItems = _cart.GetItems();
 
         var vm = new MenuViewModel {
             Categories = categories,
             Products = products,
-            SelectedCategoryId = categoryId
+            SelectedCategoryId = categoryId,
+            CartItemCount = cartItems.Sum(x => x.Quantity),
+            CartTotal = cartItems.Sum(x => x.LineTotal)
         };
 
-        return View(vm);                                         // ViewModelをViewへ渡す 
+        return View(vm);
     }
 }
-
-
-
