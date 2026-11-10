@@ -1,127 +1,187 @@
-
 /* =========================================
-   BLACK DINING
-   高級洋食レストランデザイン
+   MAGIC DINING
+   Disney Inspired Luxury Style
 ========================================= */
 
 :root {
-    --main-black: #111111;
-    --sub-black: #1b1b1b;
-    --card-black: #242424;
-    --light-black: #303030;
-    --gold: #c5a46d;
+    --main-black: #0b1120;
+    --sub-black: #17233f;
+    --card-black: #23345e;
+    --light-black: #2e4377;
+    --gold: #f7d774;
+    --gold-light: #fff0b8;
     --white: #ffffff;
-    --light-gray: #cccccc;
-    --text-gray: #999999;
-    --border-color: #3b3b3b;
+    --light-gray: #ebebeb;
+    --text-gray: #c6c6c6;
+    --border-color: rgba(247,215,116,.35);
 }
 
-/* 全体 */
+/* =========================================
+   全体
+========================================= */
 body {
-    background-color: var(--main-black);
+    background: radial-gradient(circle at top, #31497f 0%, #17233f 45%, #0b1120 100%);
     color: var(--white);
     font-family: "Noto Sans JP", "Yu Gothic", sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
-/* ナビゲーション */
+    /* 星空演出 */
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: radial-gradient(circle, rgba(255,255,255,.8) 1px, transparent 1px), radial-gradient(circle, rgba(255,255,255,.4) 1px, transparent 1px);
+        background-size: 120px 120px, 180px 180px;
+        opacity: .08;
+        pointer-events: none;
+        z-index: -1;
+    }
+
+/* =========================================
+   ナビゲーション
+========================================= */
 .navbar {
-    background-color: #080808 !important;
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border-color);
+    background: linear-gradient( to right, #101927, #1d2b4f, #101927 ) !important;
+    border-bottom: 2px solid var(--gold);
+    box-shadow: 0 0 20px rgba(247,215,116,.15);
+    padding: 16px 24px;
 }
 
 .navbar-brand {
     color: var(--gold) !important;
-    font-size: 24px;
+    font-size: 28px;
     font-weight: bold;
-    letter-spacing: 3px;
+    letter-spacing: 4px;
+    text-shadow: 0 0 10px rgba(247,215,116,.6);
 }
 
-.navbar .nav-link {
+.nav-link {
     color: var(--light-gray) !important;
-    transition: 0.3s;
+    transition: .3s;
 }
 
-    .navbar .nav-link:hover {
+    .nav-link:hover {
         color: var(--gold) !important;
     }
 
-/* 見出し */
-h1, h2, h3, h4, h5 {
-    color: var(--white);
-    font-weight: 700;
-}
-
+/* =========================================
+   見出し
+========================================= */
 h1 {
-    letter-spacing: 2px;
-    margin-bottom: 25px;
+    text-align: center;
+    color: var(--gold);
+    font-weight: 700;
+    letter-spacing: 4px;
+    margin-bottom: 30px;
+    text-shadow: 0 0 15px rgba(247,215,116,.5);
 }
 
 h2 {
-    border-left: 4px solid var(--gold);
+    border-left: 5px solid var(--gold);
     padding-left: 12px;
+    color: var(--gold);
     margin-bottom: 20px;
 }
 
-/* カード */
-.card {
-    background-color: var(--card-black);
+h3,
+h4,
+h5 {
     color: var(--white);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
+}
+
+/* =========================================
+   カード
+========================================= */
+.card {
+    background: linear-gradient( 145deg, #24355f, #1b2847 );
+    border: 1px solid rgba(247,215,116,.25);
+    border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.35);
-    transition: 0.25s;
+    box-shadow: 0 10px 25px rgba(0,0,0,.35);
+    transition: .3s;
 }
 
     .card:hover {
-        transform: translateY(-3px);
+        transform: translateY(-6px);
         border-color: var(--gold);
+        box-shadow: 0 0 20px rgba(247,215,116,.25), 0 15px 40px rgba(0,0,0,.4);
     }
 
 .card-header {
-    background-color: var(--sub-black);
+    background: linear-gradient( to right, #1b2847, #31497f );
     color: var(--gold);
-    border-bottom: 1px solid var(--border-color);
-    padding: 15px 20px;
     font-weight: bold;
+    border-bottom: 1px solid rgba(247,215,116,.25);
 }
 
 .card-body {
     padding: 22px;
 }
 
-/* ボタン共通 */
-.btn {
-    border-radius: 6px;
-    padding: 10px 22px;
+/* =========================================
+   商品画像
+========================================= */
+.so-product-photo,
+.card img {
+    display: block;
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    background: #f0eee9;
+    border-radius: 15px;
+    border: 2px solid rgba(247,215,116,.3);
+    box-shadow: 0 0 15px rgba(247,215,116,.15);
+}
+
+/* 画像未登録時 */
+.so-product-photo--empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 190px;
+    background: #f0eee9;
+    color: #666;
+    font-size: .95rem;
     font-weight: 600;
-    transition: 0.25s;
+    border-radius: 15px;
+    border: 2px solid rgba(247,215,116,.3);
+    box-shadow: 0 0 15px rgba(247,215,116,.15);
+}
+
+/* =========================================
+   ボタン共通
+========================================= */
+.btn {
+    border-radius: 30px;
+    font-weight: bold;
+    transition: .3s;
 }
 
 /* メインボタン */
 .btn-primary {
-    background-color: var(--gold);
-    border-color: var(--gold);
-    color: #111111;
+    background: linear-gradient( 135deg, #fff0b8, #f7d774 );
+    color: #0b1120;
+    border: none;
 }
 
     .btn-primary:hover {
-        background-color: #dfc18a;
-        border-color: #dfc18a;
-        color: #111111;
+        background: linear-gradient( 135deg, #fff5cf, #ffe084 );
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(255,240,184,.6);
     }
 
-/* 成功ボタン */
+/* サブボタン */
 .btn-success {
-    background-color: #343434;
-    border-color: var(--gold);
-    color: var(--gold);
+    background: linear-gradient( 135deg, #324b85, #4364b1 );
+    color: white;
+    border: none;
 }
 
     .btn-success:hover {
-        background-color: var(--gold);
-        color: #111111;
+        background: linear-gradient( 135deg, #4364b1, #5c7cce );
     }
 
 /* アウトラインボタン */
@@ -131,94 +191,96 @@ h2 {
 }
 
     .btn-outline-primary:hover {
-        background-color: var(--gold);
-        color: #111111;
+        background: var(--gold);
+        color: #0b1120;
     }
 
-/* 入力フォーム */
+/* =========================================
+   フォーム
+========================================= */
 .form-control,
 .form-select {
-    background-color: #303030;
-    color: var(--white);
-    border: 1px solid #555555;
-    border-radius: 6px;
-    padding: 11px 14px;
+    background: rgba(255,255,255,.08);
+    color: white;
+    border: 1px solid rgba(247,215,116,.25);
+    border-radius: 12px;
 }
 
     .form-control:focus,
     .form-select:focus {
-        background-color: #303030;
-        color: var(--white);
+        background: rgba(255,255,255,.1);
+        color: white;
         border-color: var(--gold);
-        box-shadow: 0 0 0 0.2rem rgba(197,164,109,0.2);
+        box-shadow: 0 0 0 0.2rem rgba(247,215,116,.2);
     }
 
     .form-control::placeholder {
-        color: #999999;
+        color: #bdbdbd;
     }
 
-/* テーブル */
+/* =========================================
+   テーブル
+========================================= */
 .table {
-    color: var(--white);
-    --bs-table-bg: var(--card-black);
-    --bs-table-color: var(--white);
-    --bs-table-border-color: var(--border-color);
-    --bs-table-hover-bg: #353535;
-    --bs-table-hover-color: var(--white);
+    --bs-table-bg: transparent;
+    --bs-table-color: white;
+    --bs-table-border-color: rgba(247,215,116,.2);
+    color: white;
 }
 
     .table thead th {
-        background-color: #080808;
         color: var(--gold);
-        border-color: var(--border-color);
-        padding: 15px;
+        background: rgba(0,0,0,.25);
+        border-bottom: 2px solid rgba(247,215,116,.25);
     }
 
-    .table tbody td {
-        padding: 13px;
-        vertical-align: middle;
+    .table tbody tr:hover {
+        background: rgba(255,255,255,.05);
     }
 
-/* バッジ */
-.badge {
-    border-radius: 5px;
-    padding: 7px 12px;
-}
-
-/* リンク */
+/* =========================================
+   リンク
+========================================= */
 a {
     color: var(--gold);
-    text-decoration: none;
 }
 
     a:hover {
-        color: #e5ca96;
+        color: var(--gold-light);
     }
 
-/* 区切り線 */
-hr {
-    border-color: var(--border-color);
-    opacity: 1;
+/* =========================================
+   バッジ
+========================================= */
+.badge {
+    background: var(--gold);
+    color: #0b1120;
+    font-weight: bold;
 }
 
-/* フッター */
+/* =========================================
+   フッター
+========================================= */
 footer {
-    background-color: #080808;
-    color: var(--light-gray);
-    padding: 25px 0;
-    margin-top: 50px;
-    border-top: 1px solid var(--border-color);
+    margin-top: 60px;
+    padding: 30px;
+    text-align: center;
+    background: linear-gradient( to right, #101927, #1d2b4f, #101927 );
+    color: #dddddd;
+    border-top: 2px solid rgba(247,215,116,.2);
 }
 
-/* スマートフォン */
+/* =========================================
+   レスポンシブ
+========================================= */
 @media (max-width: 768px) {
 
     h1 {
-        font-size: 25px;
+        font-size: 26px;
     }
 
     h2 {
-        font-size: 20px;
+        font-size: 22px;
     }
 
     .card-body {
@@ -226,14 +288,11 @@ footer {
     }
 
     .navbar-brand {
-        font-size: 20px;
-    }
-
-    .table {
-        font-size: 13px;
+        font-size: 22px;
     }
 
     .btn {
-        padding: 8px 16px;
+        width: 100%;
+        margin-bottom: 8px;
     }
 }
