@@ -14,7 +14,7 @@ public class OrderService : IOrderService {
         _db = db; // 受け取ったものを保持
     }
 
-    public　async Task<PlaceOrderResult> PlaceAsync(List<CartItem> cartItems, int tableNumber) {
+    public async Task<PlaceOrderResult> PlaceAsync(List<CartItem> cartItems, int tableNumber) {
         var result = new PlaceOrderResult(); // 注文結果とエラーをまとめる
 
         if (cartItems.Count == 0) // カートが空なら中止
@@ -74,9 +74,9 @@ public class OrderService : IOrderService {
         _db.Orders.Add(order); // 注文と明細を保存対象に
 
         await _db.SaveChangesAsync(); // SQL Server の保存完了を待つ
-        
+
         result.PublicId = order.PublicId; // 完了画面で使うID
-        
+
         return result; // 成功結果を返す
     }
 }

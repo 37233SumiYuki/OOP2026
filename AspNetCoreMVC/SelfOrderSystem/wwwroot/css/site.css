@@ -261,13 +261,14 @@ a {
 /* =========================================
    フッター
 ========================================= */
-footer {
-    margin-top: 60px;
-    padding: 30px;
+footer,
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
     text-align: center;
-    background: linear-gradient( to right, #101927, #1d2b4f, #101927 );
-    color: #dddddd;
-    border-top: 2px solid rgba(247,215,116,.2);
 }
 
 /* =========================================
@@ -295,4 +296,5 @@ footer {
         width: 100%;
         margin-bottom: 8px;
     }
+
 }
