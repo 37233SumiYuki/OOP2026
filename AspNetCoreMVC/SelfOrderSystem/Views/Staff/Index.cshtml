@@ -1,0 +1,126 @@
+﻿@using SelfOrderSystem.Models
+@model List<Order>
+
+
+    <h1 style="background:red;color:white;padding:20px;">
+    STAFF TEST
+</h1>
+
+@{
+    ViewData["Title"] = "店舗 注文一覧";
+}
+
+
+
+<h1 class="h3">店舗 注文一覧</h1>
+<p>注文日時の新しい順に最大50件を表示します</p>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">
+        まだ注文はありません
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th>注文ID</th>
+                    <th>注文日時</th>
+                    <th>卓番</th>
+                    <th>商品と数量</th>
+                    <th>合計</th>
+                    <th>状態</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td>@order.Id</td>
+
+                        <td>
+                            @order.OrderedAtUtc
+                                .ToLocalTime()
+                                .ToString("yyyy/MM/dd HH:mm")
+                        </td>
+
+                        <td>@order.TableNumber</td>
+
+                        <td>
+                            @foreach (var item in order.Items)
+                            {
+                                <div>
+                                    @item.Product?.Name × @item.Quantity
+                                </div>
+                            }
+                        </td>
+
+                        <td>
+                            @order.Items
+                                .Sum(i => i.UnitPrice * i.Quantity)
+                                .ToString("N0") 円
+                        </td>
+
+                        <td>
+                            @order.Status.ToJapanese()
+                        </td>
+
+                        <td>
+                            @if (order.Status != OrderStatus.Served)
+                            {
+                                <form asp-action="Advance" method="post">
+                                    @Html.AntiForgeryToken()
+
+                                    <input type="hidden"
+                                           name="id"
+                                           value="@order.Id" />
+
+                                    <button type="submit"
+                                            class="btn btn-primary btn-sm">
+                                        @order.Status.NextActionLabel()
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">
+                                    完了
+                                </span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@section Scripts {
+
+    <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
+
+    <script>
+        const staffConnection =
+            new signalR.HubConnectionBuilder()
+                .withUrl("/staffOrdersHub")
+                .withAutomaticReconnect()
+                .build();
+
+        staffConnection.on("OrdersChanged", () => {
+            window.location.reload();
+        });
+
+        staffConnection.onreconnected(() => {
+            window.location.reload();
+        });
+
+        staffConnection.start().catch(error => {
+            console.error("店舗 SignalR 接続エラー", error);
+        });
+    </script>
+}
